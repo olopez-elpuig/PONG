@@ -62,6 +62,10 @@ public class PONG extends ApplicationAdapter {
 			batch.begin();
 			batch.draw(pantallaGanador1, 0, 0, pantallaWidth,pantallaHeight);
 			batch.end();
+			if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+				pantalla = 1;
+				resetGame();
+			}
 		}
 
 
@@ -71,6 +75,10 @@ public class PONG extends ApplicationAdapter {
 			batch.begin();
 			batch.draw(pantallaGanador2, 0, 0, pantallaWidth,pantallaHeight);
 			batch.end();
+			if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+				pantalla = 1;
+				resetGame();
+			}
 		}
 
 		// Juego
