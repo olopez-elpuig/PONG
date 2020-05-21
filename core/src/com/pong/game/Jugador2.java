@@ -1,6 +1,5 @@
 package com.pong.game;
 
-public class Jugadores {
-    int contadorJugador1;
+public class Jugador2 {
     int contadorJugador2;
 }

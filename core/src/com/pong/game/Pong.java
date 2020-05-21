@@ -16,7 +16,8 @@ public class Pong extends ApplicationAdapter {
 	BitmapFont fuente;
 
 	Bola bola = new Bola();
-	Jugadores jugadores = new Jugadores();
+	Jugador1 jugador1 = new Jugador1();
+	Jugador2 jugador2 = new Jugador2();
 	Pantalla pantalla = new Pantalla();
 	Palas palas = new Palas();
 	boolean first;
@@ -93,8 +94,8 @@ public class Pong extends ApplicationAdapter {
 
 			// Punto jugador 2
 			if (bola.bolaX + 20 > pantalla.pantallaWidth) {
-				jugadores.contadorJugador2++;
-				if (jugadores.contadorJugador2 == 3 ) {
+				jugador2.contadorJugador2++;
+				if (jugador2.contadorJugador2 == 3 ) {
 					pantalla.pantalla = 2;
 				}
 				resetGame();
@@ -102,8 +103,8 @@ public class Pong extends ApplicationAdapter {
 
 			// Punto jugador 1
 			else if (bola.bolaX < 0) {
-				jugadores.contadorJugador1++;
-				if (jugadores.contadorJugador1 == 3){
+				jugador1.contadorJugador1++;
+				if (jugador1.contadorJugador1 == 3){
 					pantalla.pantalla = 3;
 				}
 				resetGame();
@@ -160,8 +161,8 @@ public class Pong extends ApplicationAdapter {
 			batch.draw(pelota, bola.bolaX, bola.bolaY, 20,20);
 			batch.draw(pala1, pantalla.pantallaWidth - 20, palas.pala1Y, 20,60);
 			batch.draw(pala2, 0,palas.pala2Y, 20,60);
-			fuente.draw(batch, Integer.toString(jugadores.contadorJugador1), pantalla.pantallaWidth / 2 + 50, pantalla.pantallaHeight - 30);
-			fuente.draw(batch, Integer.toString(jugadores.contadorJugador2), pantalla.pantallaWidth / 2 - 50, pantalla.pantallaHeight - 30);
+			fuente.draw(batch, Integer.toString(jugador1.contadorJugador1), pantalla.pantallaWidth / 2 + 50, pantalla.pantallaHeight - 30);
+			fuente.draw(batch, Integer.toString(jugador2.contadorJugador2), pantalla.pantallaWidth / 2 - 50, pantalla.pantallaHeight - 30);
 			batch.end();
 		}
 	}
@@ -183,7 +184,7 @@ public class Pong extends ApplicationAdapter {
 	}
 
 	private void resetPoints() {
-		jugadores.contadorJugador1 = 0;
-		jugadores.contadorJugador2 = 0;
+		jugador1.contadorJugador1 = 0;
+		jugador2.contadorJugador2 = 0;
 	}
 }
