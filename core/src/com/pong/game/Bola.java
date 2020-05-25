@@ -1,8 +1,8 @@
 package com.pong.game;
 
 public class Bola {
-    int velocidadPelota;
+    int velocidad;
     int dx;
     int dy;
-    float bolaX, bolaY;
+    float x, y;
 }

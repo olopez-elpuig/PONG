@@ -7,19 +7,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.pong.game.Bola;
 
 public class Pong extends ApplicationAdapter {
 	SpriteBatch batch;
-	Texture pelota, pantallaStart, pantallaGanador1, pantallaGanador2, pala1, pala2;
+	Texture pelota, pantallaStart, pantallaGanador1, pantallaGanador2, pala;
 
 	BitmapFont fuente;
 
 	Bola bola = new Bola();
-	Jugador1 jugador1 = new Jugador1();
-	Jugador2 jugador2 = new Jugador2();
+	Jugador jugador1 = new Jugador();
+	Jugador jugador2 = new Jugador();
 	Pantalla pantalla = new Pantalla();
-	Palas palas = new Palas();
 	boolean first;
 
 	@Override
@@ -29,16 +27,16 @@ public class Pong extends ApplicationAdapter {
 		pantallaStart = new Texture("Start.png");
 		pantallaGanador1 = new Texture("Player1win.png");
 		pantallaGanador2 = new Texture("Player2win.png");
-		pala1 = new Texture("rectangulo.png");
-		pala2 = new Texture("rectangulo.png");
+		pala = new Texture("rectangulo.png");
 		fuente= new BitmapFont(Gdx.files.internal("mono.fnt"), Gdx.files.internal("mono.png"), false);
-		bola.velocidadPelota = 3;
-		bola.dx = bola.velocidadPelota;
-		bola.dy = bola.velocidadPelota;
+		bola.velocidad = 3;
+		bola.dx = bola.velocidad;
+		bola.dy = bola.velocidad;
 		pantalla.pantalla = 0;  // 0 = start / 1 = game /  2 = ganador 1 / 3 = ganador 2
 		pantalla.pantallaWidth = 640;
 		pantalla.pantallaHeight = 480;
-		palas.subeBaja = 10;
+		jugador1.pala.subeBaja = 10;
+		jugador2.pala.subeBaja = 10;
 		resetGame();
 		resetPoints();
 	}
@@ -89,80 +87,80 @@ public class Pong extends ApplicationAdapter {
 		if (pantalla.pantalla == 1) {
 			Gdx.gl.glClearColor(0, 0, 0, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			bola.bolaX += bola.dx;
-			bola.bolaY += bola.dy;
+			bola.x += bola.dx;
+			bola.y += bola.dy;
 
 			// Punto jugador 2
-			if (bola.bolaX + 20 > pantalla.pantallaWidth) {
-				jugador2.contadorJugador2++;
-				if (jugador2.contadorJugador2 == 3 ) {
+			if (bola.x + 20 > pantalla.pantallaWidth) {
+				jugador2.puntos++;
+				if (jugador2.puntos == 3 ) {
 					pantalla.pantalla = 2;
 				}
 				resetGame();
 			}
 
 			// Punto jugador 1
-			else if (bola.bolaX < 0) {
-				jugador1.contadorJugador1++;
-				if (jugador1.contadorJugador1 == 3){
+			else if (bola.x < 0) {
+				jugador1.puntos++;
+				if (jugador1.puntos == 3){
 					pantalla.pantalla = 3;
 				}
 				resetGame();
 			}
 
 			// Cuando toca la pala 1
-			if (bola.bolaY > palas.pala1Y && bola.bolaY < palas.pala1Y + 60) {
-				if (bola.bolaX + 20 > pantalla.pantallaWidth - 20) {
-					bola.dx = -bola.velocidadPelota;
+			if (bola.y > jugador1.pala.y && bola.y < jugador1.pala.y + 60) {
+				if (bola.x + 20 > pantalla.pantallaWidth - 20) {
+					bola.dx = -bola.velocidad;
 				}
 			}
 
 			// Cuando toca la pala 2
-			else if (bola.bolaY > palas.pala2Y && bola.bolaY < palas.pala2Y + 60) {
-				if (bola.bolaX < 20) {
-					bola.dx = bola.velocidadPelota;
+			else if (bola.y > jugador2.pala.y && bola.y < jugador2.pala.y + 60) {
+				if (bola.x < 20) {
+					bola.dx = bola.velocidad;
 				}
 			}
 
 			// Si llega al final a lo alto
-			if (bola.bolaY + 20 > pantalla.pantallaHeight) {
-				bola.dy = -bola.velocidadPelota;
-			} else if (bola.bolaY < 0) {
-				bola.dy = bola.velocidadPelota;
+			if (bola.y + 20 > pantalla.pantallaHeight) {
+				bola.dy = -bola.velocidad;
+			} else if (bola.y < 0) {
+				bola.dy = bola.velocidad;
 			}
 
 			// Subir pala 1
 			if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-				if (palas.pala1Y + 60 + palas.subeBaja <= pantalla.pantallaHeight) {
-					palas.pala1Y += palas.subeBaja;
+				if (jugador1.pala.y + 60 + jugador1.pala.subeBaja <= pantalla.pantallaHeight) {
+					jugador1.pala.y += jugador1.pala.subeBaja;
 				}
 			}
 			// Bajar pala 1
 			else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-				if (palas.pala1Y - palas.subeBaja >= 0) {
-					palas.pala1Y -= palas.subeBaja;
+				if (jugador1.pala.y - jugador1.pala.subeBaja >= 0) {
+					jugador1.pala.y -= jugador1.pala.subeBaja;
 				}
 			}
 
 			// Subir pala 2
 			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-				if (palas.pala2Y + 60 + palas.subeBaja <= pantalla.pantallaHeight) {
-					palas.pala2Y += palas.subeBaja;
+				if (jugador2.pala.y + 60 + jugador2.pala.subeBaja <= pantalla.pantallaHeight) {
+					jugador2.pala.y += jugador2.pala.subeBaja;
 				}
 			}
 			// Bajar pala 2
 			else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-				if (palas.pala2Y - palas.subeBaja >= 0) {
-					palas.pala2Y -= palas.subeBaja;
+				if (jugador2.pala.y - jugador2.pala.subeBaja >= 0) {
+					jugador2.pala.y -= jugador2.pala.subeBaja;
 				}
 			}
 
 			batch.begin();
-			batch.draw(pelota, bola.bolaX, bola.bolaY, 20,20);
-			batch.draw(pala1, pantalla.pantallaWidth - 20, palas.pala1Y, 20,60);
-			batch.draw(pala2, 0,palas.pala2Y, 20,60);
-			fuente.draw(batch, Integer.toString(jugador1.contadorJugador1), pantalla.pantallaWidth / 2 + 50, pantalla.pantallaHeight - 30);
-			fuente.draw(batch, Integer.toString(jugador2.contadorJugador2), pantalla.pantallaWidth / 2 - 50, pantalla.pantallaHeight - 30);
+			batch.draw(pelota, bola.x, bola.y, 20,20);
+			batch.draw(pala, pantalla.pantallaWidth - 20, jugador1.pala.y, 20,60);
+			batch.draw(pala, 0,jugador2.pala.y, 20,60);
+			fuente.draw(batch, Integer.toString(jugador1.puntos), pantalla.pantallaWidth / 2 + 50, pantalla.pantallaHeight - 30);
+			fuente.draw(batch, Integer.toString(jugador2.puntos), pantalla.pantallaWidth / 2 - 50, pantalla.pantallaHeight - 30);
 			batch.end();
 		}
 	}
@@ -177,14 +175,15 @@ public class Pong extends ApplicationAdapter {
 	}
 
 	private void resetGame() {
-		palas.pala1Y = pantalla.pantallaHeight / 2;
-		palas.pala2Y = pantalla.pantallaHeight / 2;
-		bola.bolaX = pantalla.pantallaWidth / 2;
-		bola.bolaY = pantalla.pantallaHeight / 2;
+		jugador1.pala.y = pantalla.pantallaHeight / 2;
+		jugador2.pala.y = pantalla.pantallaHeight / 2;
+		bola.x = pantalla.pantallaWidth / 2;
+		bola.y = pantalla.pantallaHeight / 2;
 	}
 
 	private void resetPoints() {
-		jugador1.contadorJugador1 = 0;
-		jugador2.contadorJugador2 = 0;
+		jugador1.puntos = 0;
+		jugador2.puntos = 0;
 	}
 }
+
